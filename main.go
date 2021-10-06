@@ -11,9 +11,13 @@ func main() {
 	app := fiber.New()
 	app.Use(cors.New())
 
-	app.Get("/api/test", func(c *fiber.Ctx) error {
+	api := app.Group("/api")
+
+	todo := api.Group("/todo")
+
+	todo.Get("", func(c *fiber.Ctx) error {
 		return c.JSON(fiber.Map{
-			"message": "Simple go app",
+			"message": "success",
 		})
 	})
 

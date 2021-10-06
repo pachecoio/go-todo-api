@@ -1,0 +1,42 @@
+version: "3.7"
+
+services:
+  go-todo-api:
+    container_name: go-todo-apih
+    image: thisk8brd/go-todo-api:dev
+    build:
+      context: .
+      target: dev
+    volumes:
+      - .:/app
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    ports:
+      - "3000:3000"
+      - "2345:2345"
+    networks:
+      - go-todo-api-network
+
+  go-todo-api-db:
+    container_name: go-todo-api-db
+    image: postgres
+    # restart: always
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    volumes:
+      - postgres-db:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - go-todo-api-network
+
+volumes:
+  postgres-db:
+
+networks:
+  go-todo-api-network:
+    name: go-todo-api-network
